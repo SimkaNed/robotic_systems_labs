@@ -1,7 +1,7 @@
 from libs.can import CANSocket
 from libs.myactuator import MyActuator
 from time import perf_counter
-
+from math import pi
 # the serial port of device 
 # you may find one by examing /dev/ folder,
 # this is usually devices ttyACM
@@ -12,7 +12,7 @@ can_bus = CANSocket(serial_port=serial_device)
 
 # Initiate motor 
 pendulum = MyActuator(can_bus=can_bus)
-pendulum.torque_constant = 1
+pendulum.torque_constant = 1e-3
 
 # ////////////////////////////////
 # USE THIS TO SET MOTOR ZERO
@@ -24,7 +24,6 @@ pendulum.torque_constant = 1
 # Set the control loop timings
 frequency  = 500
 sampling_time = 1/frequency
-
 
 try:
     last_execution = 0
@@ -54,14 +53,10 @@ try:
 
         pendulum.set_torque(control)
 
-
 except KeyboardInterrupt:
-
     print('Disabled by interrupt')
 except Exception as e:
     print(f'\n!!!! EXCEPTION !!!!\n {e} \n!!!! EXCEPTION !!!!\n')
-
-    
 finally:
     for i in range(100):
         pendulum.set_torque(0)
