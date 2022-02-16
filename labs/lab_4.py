@@ -1,7 +1,7 @@
 from libs.can import CANSocket
 from libs.myactuator import MyActuator
 from time import perf_counter
-from math import pi, sin
+
 # the serial port of device 
 # you may find one by examing /dev/ folder,
 # this is usually devices ttyACM
@@ -12,13 +12,20 @@ can_bus = CANSocket(serial_port=serial_device)
 
 # Initiate motor 
 pendulum = MyActuator(can_bus=can_bus)
-pendulum.torque_constant = 1.0
-# motor.set_zero(persistant=True)
+pendulum.torque_constant = 1
+
+# ////////////////////////////////
+# USE THIS TO SET MOTOR ZERO
+# the motor must be rebooted after 
+# ////////////////////////////////
+# pendulum.set_zero(persistant=True)
+
+
 # Set the control loop timings
 frequency  = 500
 sampling_time = 1/frequency
 
-kp, kd = 100, 20
+
 try:
     last_execution = 0
     control = 0 
@@ -42,21 +49,19 @@ try:
         if (time - last_execution) >= sampling_time:
             last_execution = time
             # YOUR CONTROLLER GOES HERE
-            control = kp*(-pi/2 - theta) - kd*dtheta + 1000*(0.1)*9.81*0.1*sin(theta)
+            control = 0
+            print(f'Motor angle data: {round(theta, 5)}', end='    \r', flush=True)
 
-
-        # motor.set_current(control)
         pendulum.set_torque(control)
-        
-        print(f'Motor angle data: {theta}', end='    \r', flush=True)
-        # print(f'Motor angle data: {torque} {control}')
 
-# m*g*l*sin(theta) = 0.1*9.81*0.1*0.95 = km*I
-# 0.9430844374660935 100 
-# -0.9562698664006581 -101 
 
 except KeyboardInterrupt:
+
+    print('Disabled by interrupt')
+except Exception as e:
+    print(f'\n!!!! EXCEPTION !!!!\n {e} \n!!!! EXCEPTION !!!!\n')
+
+    
+finally:
     for i in range(100):
         pendulum.set_torque(0)
-    # motor.disable()
-    print('Disabled by interrupt')
