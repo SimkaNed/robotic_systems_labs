@@ -56,7 +56,7 @@ def simulator(system):
 
                 # DO SIMULATION
                 # IMPLEMENT YOUR SIMULATOR HERE
-                system.state = system.state + 
+                system.state = system.state
 
 
     except KeyboardInterrupt:
@@ -99,10 +99,9 @@ try:
 
 
 except KeyboardInterrupt:
-
     print('Disabled by interrupt')
-# except Exception as e:
-#     print(f'\n!!!! EXCEPTION !!!!\n {e} \n!!!! EXCEPTION !!!!\n')
+except Exception as e:
+    print(f'\n!!!! EXCEPTION !!!!\n {e} \n!!!! EXCEPTION !!!!\n')
 
 
 finally:
