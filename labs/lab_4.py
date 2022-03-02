@@ -2,6 +2,7 @@ from libs.can import CANSocket
 from libs.myactuator import MyActuator
 from time import perf_counter
 from math import pi
+
 # the serial port of device 
 # you may find one by examing /dev/ folder,
 # this is usually devices ttyACM

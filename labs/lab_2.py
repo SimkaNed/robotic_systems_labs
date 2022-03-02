@@ -5,7 +5,7 @@ from time import perf_counter
 # the serial port of device
 # you may find one by examing /dev/ folder,
 # this is usually devices ttyACM
-serial_device = 'ttyACM1'
+serial_device = 'ttyACM4'
 
 # Initiate the can bus socket
 can_bus = CANSocket(serial_port=serial_device)
@@ -14,7 +14,7 @@ can_bus = CANSocket(serial_port=serial_device)
 motor = MyActuator(can_bus=can_bus)
 
 # Set the control loop timings
-frequency = 500
+frequency = 200
 sampling_time = 1/frequency
 
 
@@ -41,11 +41,11 @@ try:
         if (time - last_execution) >= sampling_time:
             last_execution = time
             # YOUR CONTROLLER GOES HERE
-            control = 0
+            control = -100*theta - 10*dtheta
+            print(f'Motor angle data: {theta}', end='    \r', flush=True)
 
         motor.set_current(control)
 
-        print(f'Motor angle data: {theta}', end='    \r', flush=True)
 
 
 except KeyboardInterrupt:
