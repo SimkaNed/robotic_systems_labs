@@ -56,7 +56,7 @@ def simulator(system):
 
                 # DO SIMULATION
                 # IMPLEMENT YOUR SIMULATOR HERE
-                system.state = system.state
+                system.state = system.state + 
 
 
     except KeyboardInterrupt:
@@ -72,7 +72,6 @@ manipulator = Manager().Namespace()
 # SET INITIAL STATE
 manipulator.state = array([0, 0, 0 ,0])
 manipulator.control = zeros(2)
-
 
 simulator_proc = Process(target=simulator, args=(manipulator,))
 simulator_proc.start()
